@@ -1160,10 +1160,45 @@ eyr:2030 hcl:#1976b0
 cid:127 pid:701862616
 hgt:161cm";
 
-function structureLine($line_lenght, $value) {
+function structureLine(int $line_lenght, string $value): string {
     $counter_value = strlen($value);
     $value_line = $value . str_repeat(" ", $line_lenght - $counter_value) . "│";
     return $value_line;
+}
+
+function validatePassport(array $data) {
+    $validation_counter = 0;
+
+    if(!empty($data['byr']) && $data['byr'] <= 2002 && $data['byr'] >= 1920) {
+        ++$validation_counter;
+    }
+
+    if(!empty($data['iyr']) && $data['iyr'] >= 2010 && $data['iyr'] <= 2020) {
+        ++$validation_counter;
+    }
+
+    if(!empty($data['eyr']) && $data['eyr'] >= 2020 && $data['eyr'] <= 2030) {
+        ++$validation_counter;
+    }
+
+    if(!empty($data['hgt']) && preg_match('/([\d]+)([A-Za-z]+)/', $data['hgt'], $height_values)) {
+        if($height_values[2] == 'in' && $height_values[1] >= 59 && $height_values[1] <= 76 || $height_values[2] == 'cm' && $height_values[1] >= 150 && $height_values[1] <= 193) {
+            ++$validation_counter;
+        } 
+    }
+    if(!empty($data['hcl']) && preg_match('/\#([0-9A-F]+){3}([A-F0-9]+){3}/i', $data['hcl'])) {
+        ++$validation_counter;
+    }
+
+    if(!empty($data['ecl']) && count(array_intersect(['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'], [$data['ecl']])) == 1) {
+        ++$validation_counter;
+    }
+    
+    if(!empty($data['pid']) && strlen($data['pid']) == 9) {
+        ++$validation_counter;
+    }
+
+    return ($validation_counter == 7 ? true : false);
 }
 
 $passport_card = "
@@ -1181,7 +1216,6 @@ $passport_card = "
 │          %s
 └─────────────────────────────────┘";
 
-$passport_fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid', 'cid'];
 $valid_passports = 0;
 $arr = explode("\r\n\r\n", $input);
 $i = 0;
@@ -1195,13 +1229,12 @@ foreach($arr as $passport) {
         $fields_counter = count($passport_data);
         if($fields_counter == $i + 1) {
             
-            if($fields_counter == 7 && empty($field_pair['cid']) || $fields_counter == 8) {
+            if($fields_counter == 7 && empty($field_pair['cid']) && validatePassport($field_pair) || $fields_counter == 8 && validatePassport($field_pair)) {
                 ++$valid_passports;
                 $is_aproved = true;
             } else {
                 $is_aproved = false;
             }
-
             echo sprintf($passport_card, 
             structureLine(19, (!empty($field_pair['pid']) ? $field_pair['pid'] : "MISSING")), 
             structureLine(20, (!empty($field_pair['cid']) ? $field_pair['cid'] : "MISSING")), 
@@ -1221,4 +1254,4 @@ foreach($arr as $passport) {
 }
 echo $valid_passports;
 
-//result 254 WITH card ascii lookup
+//result 184 WITH card ascii lookup
