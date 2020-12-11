@@ -1205,14 +1205,14 @@ $passport_card = "
 ┌─────────────────────────────────┐
 │ Passport ID: %s
 │ Country ID: %s
-│ ─────────────────               │
+│ ─────────────────────────────── │
 │ ┌─────┐   │ Birthday: %s
-│ │     │   │ Height: %s
+│ │%s│   │ Height: %s
 │ │     │   │ Hair Color: %s
 │ └─────┘   │ Eye Color: %s
 │ Issue: %s
 │ Exp: %s
-│                                 │
+│ ─────────────────────────────── │
 │          %s
 └─────────────────────────────────┘";
 
@@ -1239,9 +1239,10 @@ foreach($arr as $passport) {
             structureLine(19, (!empty($field_pair['pid']) ? $field_pair['pid'] : "MISSING")), 
             structureLine(20, (!empty($field_pair['cid']) ? $field_pair['cid'] : "MISSING")), 
             structureLine(10, (!empty($field_pair['byr']) ? $field_pair['byr'] : "MISSING")), 
+            ($is_aproved ? " ʘ‿ʘ " : " ಥ﹏ಥ"), 
             structureLine(12, (!empty($field_pair['hgt']) ? $field_pair['hgt'] : "MISSING")), 
             structureLine(8, (!empty($field_pair['hcl']) ? $field_pair['hcl'] : "MISSING")), 
-            structureLine(9, (!empty($field_pair['eyr']) ? $field_pair['eyr'] : "MISSING")), 
+            structureLine(9, (!empty($field_pair['ecl']) ? @$field_pair['ecl'] : "MISSING")), 
             structureLine(25, (!empty($field_pair['iyr']) ? $field_pair['iyr'] : "MISSING")), 
             structureLine(27, (!empty($field_pair['eyr']) ? $field_pair['eyr'] : "MISSING")),
             structureLine(24, ($is_aproved ? '✅ APROVED' : '❌ NOT APROVED')))."\n";
