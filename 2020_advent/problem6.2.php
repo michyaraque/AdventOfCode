@@ -2202,7 +2202,6 @@ kofvirdn";
 
 $arr = explode("\r\n\r\n", $input);
 $correct = 0;
-$j = 0;
 
 foreach($arr as $group) {
     $data = preg_replace(["/\r/", "/\n/"], ['', ' '], $group);

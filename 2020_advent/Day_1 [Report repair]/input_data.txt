@@ -1,6 +1,4 @@
-<?php
-
-$input = "1695
+1695
 1157
 1484
 1717
@@ -199,19 +197,4 @@ $input = "1695
 1999
 1405
 1784
-1196";
-
-$input = explode("\n", $input);
-
-foreach($input as $numA) {
-    foreach($input as $numB) {
-        foreach($input as $numC) {
-            if($numA+$numB+$numC == 2020) {
-                echo $numA*$numB*$numC;
-                exit;
-            }
-        }
-    }
-}
-
-//result 120637440
+1196
