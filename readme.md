@@ -9,6 +9,8 @@ I actually im doing the solutions using PHP 7.4
 - [⭐]: One Star
 - [⭐⭐]: Two Starts
 ### Resolved problems
+- 12 ⭐
+- 11
 - 10
 - 9
 - 8
